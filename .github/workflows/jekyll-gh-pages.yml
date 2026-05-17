@@ -35,15 +35,18 @@ jobs:
           # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install plugins
         run: cd docs/ && bundle install
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Install plugins
-        run: cd docs/ && bundle install
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./docs
-          destination: ./_site
+      # - name: Setup Pages
+      #   uses: actions/configure-pages@v5
+      # - name: Install plugins
+      #   run: cd docs/ && bundle install
+      # - name: Build with Jekyll
+      #   uses: actions/jekyll-build-pages@v1
+      #   with:
+      #     source: ./docs
+      #     destination: ./_site
+
+      - name: Build
+        run: bundle exec jekyll build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
