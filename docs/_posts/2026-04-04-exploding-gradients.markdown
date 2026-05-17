@@ -360,12 +360,12 @@ $$
 
 The direction of the inequality prohibits us for using it to prove the inverse of the vanishing gradients. Thus, we cannot form a sufficient condition but only a necessary one:
 
-**For the exploding gradients problem to appear we need: $$\boxed{\sigma_{max}(W_{rec}) > \frac{1}{\gamma}}$$, with $$\|diag(\sigma'(x_{j-1}))\|_2 > \gamma$$. Long term components will then explode (as $t \rightarrow \infty$)**:
+**For the exploding gradients problem to appear we need: $$\boxed{\sigma_{max}(W_{rec}) > \frac{1}{\gamma}}$$, with $$\|diag(\sigma'(x_{j-1}))\|_2 > \gamma$$. Long term components will then be able to explode (as $t \rightarrow \infty$)**.
 
 
 ### Notes
 
-This article was heavily based on the paper by [Pascanu et al.](https://doi.org/10.48550/arxiv.1211.5063) which explore the problem of vanishing gradients at great technical detail.
+This article was heavily based on the paper by [Pascanu et al.](https://doi.org/10.48550/arxiv.1211.5063) which explores the problem of vanishing gradients at great technical detail.
 
 I tried keeping the notation on par with their paper as well as other sources to maintain consistency.
 
