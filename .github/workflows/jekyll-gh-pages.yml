@@ -47,8 +47,12 @@ jobs:
 
       - name: Build
         run: cd docs && bundle exec jekyll build
+      - name: List
+        run: ls -R
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/_site/
 
   # Deployment job
   deploy:
