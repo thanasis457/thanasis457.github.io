@@ -2,6 +2,7 @@
 layout: post
 title:  "The Vanishing and Exploding Gradients Problem"
 date:   2026-04-04 17:00:01 +0200
+author: Thanasis Taprantzis
 categories: jekyll update
 ---
 
