@@ -5,9 +5,11 @@ date:   2026-04-04 17:00:01 +0200
 categories: jekyll update
 ---
 
-While studying neural networks you might often hear of the vanishing/exploding gradients problem as a usual issue when trying to train deep multi-layered models. "The model's gradient gets exponentially large or small the more layers you add".
+The vanishing/exploding gradients problem is a well known issue when trying to train deep multi-layered models. "The model's gradient gets exponentially large or small the more layers you add".
 
-But ... why? Intuitively, one can probably see on a very high level why that might happen. However, what is the mathematical reason this happens, what is the proof that explains why this occurs? Let us explore this problem at a fundamental level and understand what the problem is and why it happens at its core.
+But ... why?
+
+This post intends to go further than intuitive, high level explanations. What is the mathematical reason this happens, what is the proof that explains why this occurs? Let us explore this problem at a fundamental level and understand what the problem is and why it happens at its core.
 
 
 ### Recurrent Neural Networks Fundamentals
@@ -162,6 +164,7 @@ This can be simplified further. Notice that when taking the derivative of $x_t$ 
 That is, $x_t$ is a function of $x_{t-1}$ which is a function of $x_{t-2}$ which is a function of $x_{t-3}$ ... until $x_k$. **There are no other paths from $x_t$ to $x_k$.** I.e. $x_t$ is not a function of both $x_{t-1}$ and $x_{t-2}$ or any other $x_j$ for some $j\neq t-1$.
 
 Thus:
+
 $$
 \begin{align}
   \frac{\partial x_t}{\partial x_k} &= \frac{\partial x_t}{\partial x_{t-1}} \frac{\partial x_{t-1}}{\partial x_k}\\
@@ -259,7 +262,7 @@ This equation is **crucial**. We just showed that when optimising for the loss o
 _"To understand this phenomenon we need to look at the form of each temporal component, and in particular at the matrix factors $\frac{\partial x_t}{\partial x_k}$ [...] that take the form of a product of $t − k$ Jacobian matrices. In the same way a product of $t − k$ real numbers can shrink to zero or explode to infinity, so does this product of matrices (along some direction v)"_ ([Pascanu et al](https://proceedings.mlr.press/v28/pascanu13.pdf)).
 
 
-#### A Linear Algebra Precursor
+#### **A Linear Algebra Precursor**
 
 Before we step into the final part, let us introduce/recap a few concepts and formulas that will be important.
 
@@ -302,7 +305,7 @@ We are allowed to do this because all the eigenvalues of $$A^*A$$ are non-negati
 1. Hermitian: $$(A^*A)^* = A^*A$$
 2. PSD: $$x^* A^*A x = (Ax)^*(Ax) = \sum\limits_{i} {(Ax)_i ^2} \geq 0$$
 
-#### Vanishing Gradients
+#### **Vanishing Gradients**
 
 Review equations (11) and (13). They have led us to this recursive multiplication of $W_{rec}$. Attempting to visualise how the vectors shrink and expand due to this product is difficult.
 
@@ -346,7 +349,7 @@ Since $\eta < 1$, as $t-k$ increases,  the terms tend to go to 0. This means tha
 
 Thus, under the requirement that $\sigma_{max}(W_{rec}) < \frac{1}{\gamma}$, the model becomes unable to consider events in the past and bases its predictions on recent events. The vanishing gradients make the model "forget" past events easily (ie. past events do not contribute to future outcomes).
 
-#### Exploding Gradients
+#### **Exploding Gradients**
 
 Just as gradients can vanish due to the repeated multiplication of $W_{rec}$, they can similary "explode". We will skip the full proof as it is almost identical to the vanishing gradients one we showed above.
 
