@@ -123,12 +123,15 @@ $$
 $$
 
 which can be simplified to 
+
 $$
 \begin{align}
   \boxed{\frac{\partial x_t}{\mathcal{\partial\theta}} = \frac{\partial x_t}{\mathcal{\partial g}} + \frac{\partial x_t}{\mathcal{\partial x_{t-1}}} \frac{\partial x_{t-1}}{\mathcal{\partial\theta}}}
 \end{align}\tag{7}
 $$
+
 Now we can expand:
+
 $$
 \begin{align}
   \Rightarrow \frac{\partial\mathcal{E_t}}{\mathcal{\partial\theta}}
@@ -141,6 +144,7 @@ $$
 Notice that the last term $\frac{\partial x_{t-1}}{\mathcal{\partial\theta}}$ can be recursively substituted using eq (7) which will result in an equation with $\frac{\partial x_{t-2}}{\mathcal{\partial\theta}}$ which will be recursively substituted, etc. till we reach $x_1$.
 
 Thus, intuitively we should see the following pattern occurring in eq (8.1):
+
 $$
 \begin{align}
   \Rightarrow \frac{\partial\mathcal{E_t}}{\mathcal{\partial\theta}}
@@ -177,6 +181,7 @@ $$
 
 
 So, eq (9) gets further simplified to:
+
 $$
 \begin{align}
   \Rightarrow \frac{\partial\mathcal{E_t}}{\mathcal{\partial\theta}}
@@ -250,6 +255,7 @@ $$
 $$
 
 Going back to the beginning of this paragraph, we can now show the following:
+
 $$
 \begin{align}
     \frac{\partial x_t}{\partial x_k} = \prod_{j=k+1}^t \frac{\partial x_{j}}{\partial x_{j-1}} = \prod_{j=k+1}^t [W_{rec} diag(\sigma'(x_{j-1}))]
