@@ -2,6 +2,7 @@
 layout: post
 title:  "The Vanishing and Exploding Gradients Problem"
 date:   2026-04-04 17:00:01 +0200
+updated: 2026-06-04
 author: Thanasis Taprantzis
 categories: jekyll update
 ---
@@ -13,13 +14,13 @@ But ... why?
 This post intends to go further than intuitive, high level explanations. What is the mathematical reason this happens, what is the proof that explains why this occurs? Let us explore this problem at a fundamental level and understand what the problem is and why it happens at its core.
 
 
-### Recurrent Neural Networks Fundamentals
+## Recurrent Neural Networks Fundamentals
 
 We will begin with a brief but necessary review of what a recurrent neural network is and how we can formulate it formally.
 
 A recurrent neural network is a neural network _whose output will constitute part of its next input_.
 
-It's important to note that the input depends both on the previous output and any new input the model might receive at any particular loop. Thus, RNNs function as neural networks that can "remember" information from past computations. The output of previous computations is simply propagated _directly_ to newer states.
+It is important to note that the input depends both on the previous output and any new input the model might receive at any particular loop. Thus, RNNs function as neural networks that can "remember" information from past computations. The output of previous computations is simply propagated _directly_ to newer states.
 
 Take a look at a snapshot of the RNN flow at some timestamp $t$.
 ![The flow of an RNN](/assets/RNN_flow.png)
@@ -32,7 +33,7 @@ Unlike a traditional Neural Network, the loss is not simply defined on the final
 
 Our findings will be applicable to any multi-layered network with the same foundational structure.
 
-### A Mathematical Formulation of RNN
+## A Mathematical Formulation of RNN
 Let us describe the RNN in algebraic terms. At each timestep $t$:
 
 $$
@@ -61,7 +62,7 @@ where $W_{rec}$ (recurrent) are the weights that are multiplied with the previou
 
 We will stick with eq. (2) but note that implementation details can change, however the essence of the problem is the same. Eq. (2) is a "vanilla" implementation of RNN, and all findings can be applied to different implementations of RNN models.
 
-### Defining the Loss
+## Defining the Loss
 
 With RNNs we are optimising for some type of error/loss. The specific loss function we utilize is arbitrary for this proof. For instance, it could be the difference of the output vector $x_t$ and some target $y_t$ squared ([MSE](https://en.wikipedia.org/wiki/Mean_squared_error)). All we should care about is that our loss is a function of $x_t$, i.e. $\mathcal{E_t} = \mathcal{L}(x_t)$.
 
@@ -73,9 +74,9 @@ $$
 \mathcal{E} = \sum_{t} \mathcal{E_t} = \sum_t \mathcal{L(x_t)} \tag{3}
 $$
 
-### Optimising for the Loss
+## Optimising for the Loss
 
-Now for the part we have building up to: let us optimise for the loss as defined above. We are trying to minimise the loss by altering the parameters of the model ($\theta$).
+Now for the part we have been building up to: let us optimise for the loss as defined above. We are trying to minimise the loss by altering the parameters of the model ($\theta$).
 
 **Remember, vanishing/exploding gradients affects our ability to optimise the loss.** Here is where we start to show this.
 
@@ -191,7 +192,7 @@ $$
 
 **TL;DR, we derived a simple formula for optimising the loss at a timstep $t$.**
 
-#### Solving the Gradients
+### Solving the Gradients
 
 With the simplified formulation of what our loss looks like at timestep $t$, we will go a step further and start computing the gradients.
 
@@ -264,16 +265,16 @@ $$
 
 This equation is **crucial**. We just showed that when optimising for the loss of an RNN we will inevitably have to deal with a gradient computation which involves multiplying $W_{rec}$ repeatedly with itself $t-k$ times. This intuitively means that the deeper the network the more times we will have to multiply with $W_{rec}$ and the more amplified the effect of the matrix will be. Let's make this concrete.
 
-### Vanishing/Exploding the Gradients
+## Vanishing/Exploding the Gradients
 
 _"To understand this phenomenon we need to look at the form of each temporal component, and in particular at the matrix factors $\frac{\partial x_t}{\partial x_k}$ [...] that take the form of a product of $t − k$ Jacobian matrices. In the same way a product of $t − k$ real numbers can shrink to zero or explode to infinity, so does this product of matrices (along some direction v)"_ ([Pascanu et al](https://proceedings.mlr.press/v28/pascanu13.pdf)).
 
 
-#### **A Linear Algebra Precursor**
+### **A Linear Algebra Precursor**
 
 Before we step into the final part, let us introduce/recap a few concepts and formulas that will be important.
 
-##### **Singular values**
+#### **Singular values**
 
 A singular value of a matrix $\sigma(A)$ geometrically expresses the _stretching factor in any direction_. This is different than the eigenvalues of a matrix which only express the stretching factor along the direction of a matrix's eigenvectors (which do not necessarily span the matrix's space).
 
@@ -285,7 +286,7 @@ $$
 \sigma_{max}(A) = \sqrt{\lambda_{max}(A^*A)}
 $$
 
-##### **Spectral Norm (2-Norm) of a Matrix**
+#### **Spectral Norm (2-Norm) of a Matrix**
 
 The spectral norm of a matrix is just the max singular value:
 
@@ -293,7 +294,7 @@ $$
 \|A\|_2 = \sigma_{max}(A) = \sqrt{\lambda_{max}(A^*A)}
 $$
 
-##### **Spectral Radius**
+#### **Spectral Radius**
 
 The spectral radius of a matrix is a fancy term for the maximum (absolute) eigenvalue:
 
@@ -301,7 +302,7 @@ $$
 \rho(A) = \max \{\vert\lambda_1\vert, \dots, \vert\lambda_n\vert\}
 $$
 
-##### **Spectral Norm + Spectral Radius**
+#### **Spectral Norm + Spectral Radius**
 
 $$
 \|A\|_2 = \sigma_{max}(A) = \sqrt{\lambda_{max}(A^*A)} = \sqrt{\rho(A^*A)}
@@ -312,7 +313,7 @@ We are allowed to do this because all the eigenvalues of $$A^*A$$ are non-negati
 1. Hermitian: $$(A^*A)^* = A^*A$$
 2. PSD: $$x^* A^*A x = (Ax)^*(Ax) = \sum\limits_{i} {(Ax)_i ^2} \geq 0$$
 
-#### **Vanishing Gradients**
+### **Vanishing Gradients**
 
 Review equations (11) and (13). They have led us to this recursive multiplication of $W_{rec}$. Attempting to visualise how the vectors shrink and expand due to this product is difficult.
 
@@ -356,7 +357,7 @@ Since $\eta < 1$, as $t-k$ increases,  the terms tend to go to 0. This means tha
 
 Thus, under the requirement that $\sigma_{max}(W_{rec}) < \frac{1}{\gamma}$, the model becomes unable to consider events in the past and bases its predictions on recent events. The vanishing gradients make the model "forget" past events easily (ie. past events do not contribute to future outcomes).
 
-#### **Exploding Gradients**
+### **Exploding Gradients**
 
 Just as gradients can vanish due to the repeated multiplication of $W_{rec}$, they can similary "explode". We will skip the full proof as it is almost identical to the vanishing gradients one we showed above.
 
@@ -373,7 +374,7 @@ The direction of the inequality prohibits us for using it to prove the inverse o
 **For the exploding gradients problem to appear we need: $$\boxed{\sigma_{max}(W_{rec}) > \frac{1}{\gamma}}$$, with $$\|diag(\sigma'(x_{j-1}))\|_2 > \gamma$$. Long term components will then be able to explode (as $t \rightarrow \infty$)**.
 
 
-### Notes
+## Notes
 
 This article was heavily based on the paper by [Pascanu et al.](https://doi.org/10.48550/arxiv.1211.5063) which explores the problem of vanishing gradients at great technical detail.
 
@@ -381,7 +382,7 @@ I tried keeping the notation on par with their paper as well as other sources to
 
 On a minor note, the paper on equation (5) has a minor algebraic error on $W^T_{rec}diag(\sigma'(x_{i-1}))$. Tracing the equation that leads to this result (as we showed in this article) actually leads to $W_{rec}diag(\sigma'(x_{i-1}))$. Even if we decide to not use numerator layout notation, the outcome is still different. However, this does not cause any fundamental error in the findings of their paper.
 
-### References
+## References
 - Pascanu, R., Mikolov, T., & Bengio, Y. (2012). On the difficulty of training Recurrent Neural Networks. arXiv. <https://doi.org/10.48550/arxiv.1211.5063>
 - “Matrix Norm.” Wikipedia, Wikimedia Foundation, 25 Apr. 2026, [Matrix_norm](https://en.wikipedia.org/wiki/Matrix_norm)
 - “Vanishing Gradient Problem.” Wikipedia, Wikimedia Foundation, 30 Sept. 2025, [Vanishing_gradient_problem](https://en.wikipedia.org/wiki/Vanishing_gradient_problem).
