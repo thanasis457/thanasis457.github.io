@@ -38,7 +38,7 @@ jobs:
       - name: Install plugins
         run: cd ${{ env.SITE_DIR }} && bundle install
       - name: Build
-        run: cd ${{ env.SITE_DIR }} && bundle exec jekyll build
+        run: cd ${{ env.SITE_DIR }} && JEKYLL_ENV=production bundle exec jekyll build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
