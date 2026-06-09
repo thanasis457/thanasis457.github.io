@@ -33,10 +33,9 @@ linkedin_username: athanasios-taprantzis-7227811b8
 theme: minima
 plugins:
   - jekyll-feed
-  
-jekyll-spaceship:
-  processors:
-    - mathjax-processor
+
+google_analytics: G-D8FG1SWYFQ
+show_excerpts: true
 
 # Exclude from processing.
 # The following items will not be processed, by default.
